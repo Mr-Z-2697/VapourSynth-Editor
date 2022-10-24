@@ -2,8 +2,8 @@ CONFIG += qt
 
 QT += widgets
 QT += network
+QT += core5compat
 
-QT_VERSION_WARNING = "WARNING: Linking against Qt version lower than 5.6.1 is likely to cause CLI tools video encoding to crash due to I/O but in Qt."
 
 win32 {
 	equals(QT_MAJOR_VERSION, 5) {
@@ -102,15 +102,9 @@ CONFIG(debug, debug|release) {
 S = $${DIR_SEPARATOR}
 
 D = $$DESTDIR
-equals(QT_MAJOR_VERSION, 5) {
-	D = $$replace(D, $$escape_expand(\\), $$S)
-}
 D = $$replace(D, /, $$S)
 
 SC = $${COMMON_DIRECTORY}/
-equals(QT_MAJOR_VERSION, 5) {
-	SC = $$replace(SC, $$escape_expand(\\), $$S)
-}
 SC = $$replace(SC, /, $$S)
 
 E = $$escape_expand(\n\t)
@@ -127,10 +121,6 @@ macx {
 }
 
 win32 {
-	equals(QT_MAJOR_VERSION, 5) {
-		QT += winextras
-	}
-
 	INCLUDEPATH += 'C:/Program Files/VapourSynth/sdk/include/'
 
 	DEPLOY_COMMAND = windeployqt
