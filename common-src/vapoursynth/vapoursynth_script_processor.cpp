@@ -717,7 +717,68 @@ bool VapourSynthScriptProcessor::recreatePreviewNode(NodePair & a_nodePair)
 		}
 
 		if(m_cpCoreInfo.core < 58)
-			m_cpVSAPI->mapSetInt(pArgumentMap, "prefer_props", 1, maReplace);
+			m_cpVSAPI->propSetInt(pArgumentMap, "prefer_props", 1, paReplace);
+
+		if(isYUV)
+		{
+			const char * matrixInS = nullptr;
+			switch(m_yuvMatrix)
+			{
+			case YuvMatrixCoefficients::m709:
+				matrixInS = "709";
+				break;
+			case YuvMatrixCoefficients::m470BG:
+				matrixInS = "470bg";
+				break;
+			case YuvMatrixCoefficients::m170M:
+				matrixInS = "170m";
+				break;
+			case YuvMatrixCoefficients::m2020_NCL:
+				matrixInS = "2020ncl";
+				break;
+			case YuvMatrixCoefficients::m2020_CL:
+				matrixInS = "2020cl";
+				break;
+			default:
+				Q_ASSERT(false);
+			}
+
+			int matrixStringLength = (int)strlen(matrixInS);
+			m_cpVSAPI->propSetData(pArgumentMap, "matrix_in_s",
+				matrixInS, matrixStringLength, paReplace);
+
+			if(m_yuvMatrix == YuvMatrixCoefficients::m2020_CL)
+			{
+				const char * transferIn = "709";
+				const char * transferOut = "2020_10";
+
+				m_cpVSAPI->propSetData(pArgumentMap, "transfer_in_s",
+					transferIn, (int)strlen(transferIn), paReplace);
+				m_cpVSAPI->propSetData(pArgumentMap, "transfer_s",
+					transferOut, (int)strlen(transferOut), paReplace);
+			}
+		}
+
+		if(canSubsample)
+		{
+			int64_t chromaLoc = 0;
+			switch(m_chromaPlacement)
+			{
+			case ChromaPlacement::LEFT:
+				chromaLoc = 0;
+				break;
+			case ChromaPlacement::CENTER:
+				chromaLoc = 1;
+				break;
+			case ChromaPlacement::TOP_LEFT:
+				chromaLoc = 2;
+				break;
+			default:
+				Q_ASSERT(false);
+			}
+			m_cpVSAPI->propSetInt(pArgumentMap, "chromaloc_in",
+				chromaLoc, paReplace);
+		}
 
 		pResultMap = m_cpVSAPI->invoke(pResizePlugin, resizeName, pArgumentMap);
 
