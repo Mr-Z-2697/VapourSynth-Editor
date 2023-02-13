@@ -910,9 +910,11 @@ QString VapourSynthScriptProcessor::framePropsString(
 		{ptInt, "int"},
 		{ptFloat, "float"},
 		{ptData, "data"},
-		{ptVideoNode, "node"},
-		{ptVideoFrame, "frame"},
 		{ptFunction, "function"},
+		{ptVideoNode, "vnode"},
+		{ptVideoFrame, "vframe"},
+		{ptAudioNode, "anode"},
+		{ptAudioFrame, "aframe"}
 	};
 
 	const VSMap * cpProps = m_cpVSAPI->getFramePropertiesRO(a_cpFrame);
@@ -924,7 +926,7 @@ QString VapourSynthScriptProcessor::framePropsString(
 		if(!propKey)
 			continue;
 		QString currentPropString = QString("%1 : ").arg(propKey);
-		char propType = m_cpVSAPI->mapGetType(cpProps, propKey);
+		int propType = m_cpVSAPI->mapGetType(cpProps, propKey);
 		currentPropString += propTypeToString[propType];
 		int elementsNumber = m_cpVSAPI->mapNumElements(cpProps, propKey);
 		if(elementsNumber > 1)
@@ -933,6 +935,8 @@ QString VapourSynthScriptProcessor::framePropsString(
 		{
 		case ptVideoFrame:
 		case ptVideoNode:
+		case ptAudioFrame:
+		case ptAudioNode:
 		case ptFunction:
 			break;
 		case ptUnset:
@@ -968,12 +972,30 @@ QString VapourSynthScriptProcessor::framePropsString(
 				}
 				else if(propType == ptData)
 				{
-					const char * element = m_cpVSAPI->mapGetData(cpProps,
+					int hint = m_cpVSAPI->mapGetDataTypeHint(cpProps,
 						propKey, j, &error);
 					if(error)
 						elementString = "<error>";
+					else if(hint == dtUtf8)
+					{
+						const char * element = m_cpVSAPI->mapGetData(cpProps,
+							propKey, j, &error);
+						if(error)
+							elementString = "<error>";
+						else
+							elementString = QString::fromUtf8(element);
+					}
+					else if(hint == dtBinary)
+					{
+						int len = m_cpVSAPI->mapGetDataSize(cpProps,
+							propKey, j, &error);
+						elementString = QString("<binary with %1 bytes>")
+							.arg(len);
+					}
 					else
-						elementString = QString::fromUtf8(element);
+					{
+						elementString = "<unknown type>";
+					}
 				}
 
 				elementStringList += elementString;

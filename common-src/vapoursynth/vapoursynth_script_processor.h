@@ -49,7 +49,7 @@ public:
 
 	void setScriptName(const QString & a_scriptName);
 
-	QString framePropsString(const VSFrameRef * a_cpFrame) const;
+	QString framePropsString(const VSFrame * a_cpFrame) const;
 
 public slots:
 
@@ -92,7 +92,7 @@ private:
 
 	NodePair & getNodePair(int a_outputIndex, bool a_needPreview);
 
-	void printFrameProps(const VSFrameRef * a_cpFrame);
+	void printFrameProps(const VSFrame * a_cpFrame);
 
 	SettingsManagerCore * m_pSettingsManager;
 

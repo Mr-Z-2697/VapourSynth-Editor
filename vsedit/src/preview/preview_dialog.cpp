@@ -2345,10 +2345,10 @@ void PreviewDialog::setCurrentFrame(const VSFrame * a_cpOutputFrame,
 
 void PreviewDialog::updateFrameProps(bool a_forced)
 {
-	if(a_forced || (isVisible() && m_cpFrameRef))
+	if(a_forced || (isVisible() && m_cpFrame))
 	{
 		QString props = m_pVapourSynthScriptProcessor->
-			framePropsString(m_cpFrameRef);
+			framePropsString(m_cpFrame);
 		QString info = QString("Index %1 | Frame %2 \n\n")
 			.arg(m_outputIndex).arg(m_frameExpected);
 		m_pFramePropsPanel->setText(info + props + QString("\n"));

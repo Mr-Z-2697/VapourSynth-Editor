@@ -25,6 +25,7 @@ class QTimer;
 class SettingsManager;
 class SettingsDialog;
 class PreviewAdvancedSettingsDialog;
+class VSNodeInfo;
 class FramePropsPanel;
 
 extern const char TIMELINE_BOOKMARKS_FILE_SUFFIX[];
