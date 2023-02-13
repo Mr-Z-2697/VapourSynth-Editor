@@ -988,7 +988,7 @@ QString VapourSynthScriptProcessor::framePropsString(
 		propsStringList += currentPropString;
 	}
 
-	propsString = propsStringList.join("\n");
+	propsString = propsStringList.join(" \n");
 
 	return propsString;
 }

@@ -8,6 +8,7 @@
 #include "../../../common-src/chrono.h"
 
 #include <QPixmap>
+#include <QLabel>
 #include <QIcon>
 #include <map>
 #include <vector>
@@ -24,7 +25,7 @@ class QTimer;
 class SettingsManager;
 class SettingsDialog;
 class PreviewAdvancedSettingsDialog;
-class VSNodeInfo;
+class FramePropsPanel;
 
 extern const char TIMELINE_BOOKMARKS_FILE_SUFFIX[];
 
@@ -141,6 +142,8 @@ protected slots:
 
 	void slotSaveGeometry();
 
+	void slotToggleFrameProps();
+
 	void slotSwitchOutputIndex(int a_outputIndex);
 
 	void slotSwitchOutputIndex0() { slotSwitchOutputIndex(0); }
@@ -156,6 +159,8 @@ protected slots:
 
 protected:
 
+	friend class FramePropsPanel;
+
 	virtual void stopAndCleanUp() override;
 
 	void moveEvent(QMoveEvent * a_pEvent) override;
@@ -163,6 +168,8 @@ protected:
 	void resizeEvent(QResizeEvent * a_pEvent) override;
 
 	void changeEvent(QEvent * a_pEvent) override;
+
+	void closeEvent(QCloseEvent * a_pEvent) override;
 
 	void keyPressEvent(QKeyEvent * a_pEvent) override;
 
@@ -184,6 +191,8 @@ protected:
 
 	void setCurrentFrame(const VSFrame * a_cpOutputFrame,
 		const VSFrame * a_cpPreviewFrame);
+
+	void updateFrameProps(bool a_forced);
 
 	double valueAtPoint(size_t a_x, size_t a_y, int a_plane);
 
@@ -246,6 +255,7 @@ protected:
 	QAction * m_pActionGoToPreviousBookmark;
 	QAction * m_pActionGoToNextBookmark;
 	QAction * m_pActionPasteShownFrameNumberIntoScript;
+	QAction * m_pActionToggleFramePropsPanel;
 	QAction * m_pActionSwitchToOutputIndex0;
 	QAction * m_pActionSwitchToOutputIndex1;
 	QAction * m_pActionSwitchToOutputIndex2;
@@ -282,7 +292,29 @@ protected:
 
 	qreal m_devicePixelRatio;
 
+	FramePropsPanel * m_pFramePropsPanel;
+
 	bool m_toChangeTitle;
+};
+
+class FramePropsPanel: public QLabel
+{
+	Q_OBJECT
+
+public:
+	FramePropsPanel(SettingsManager * a_pSettingsManager,
+		PreviewDialog * a_pFakeParent);
+
+	void keyPressEvent(QKeyEvent * a_pEvent) override;
+
+public slots:
+	void slotHide() { setVisible(false); }
+
+private:
+	PreviewDialog * m_pFakeParent;
+	QAction * m_pActionHide;
+
+	void setHideAction(SettingsManager * a_pSettingsManager);
 };
 
 #endif // PREVIEWDIALOG_H_INCLUDED
