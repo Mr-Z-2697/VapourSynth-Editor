@@ -140,9 +140,7 @@ int main(int argc, char *argv[])
 		return -2;
 	}
 
-#if defined(Q_OS_WIN)
- 	hide_tty();
-#endif
+	print_version();
 
 	QApplication::setAttribute(Qt::AA_DontUseNativeMenuBar);
 	QGuiApplication::setHighDpiScaleFactorRoundingPolicy(
