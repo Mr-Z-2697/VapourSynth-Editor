@@ -4,6 +4,10 @@ QT += widgets
 QT += network
 QT += core5compat
 
+win32 {
+	QT += multimedia
+}
+
 
 win32 {
 	equals(QT_MAJOR_VERSION, 5) {
