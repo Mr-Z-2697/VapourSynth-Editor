@@ -69,6 +69,7 @@ MainWindow::MainWindow(SettingsManager *settings) : QMainWindow()
 	, m_lastSavedText()
 	, m_pJobServerWatcherSocket(nullptr)
 	, m_pGeometrySaveTimer(nullptr)
+	, m_pReloadTextTimer(nullptr)
 {
 	loadFonts();
 	vsedit::disableFontKerning(this);
@@ -186,6 +187,11 @@ MainWindow::MainWindow(SettingsManager *settings) : QMainWindow()
 	connect(m_pGeometrySaveTimer, &QTimer::timeout,
 		this, &MainWindow::slotSaveGeometry);
 
+	m_pReloadTextTimer = new QTimer(this);
+	m_pReloadTextTimer->setInterval(500);
+	connect(m_pReloadTextTimer, &QTimer::timeout,
+		this, &MainWindow::slotReloadTextFromDisk);
+
 	createActionsAndMenus();
 
 	slotChangeWindowTitle();
@@ -198,6 +204,9 @@ MainWindow::MainWindow(SettingsManager *settings) : QMainWindow()
 		showMaximized();
 
 	loadStartUpScript();
+
+	if(m_pSettingsManager->getReloadScriptFromDisk())
+		m_pReloadTextTimer->start();
 }
 
 // END OF MainWindow::MainWindow()
@@ -210,6 +219,9 @@ MainWindow::~MainWindow()
 		m_pGeometrySaveTimer->stop();
 		slotSaveGeometry();
 	}
+
+	if(m_pReloadTextTimer->isActive())
+		m_pReloadTextTimer->stop();
 
 	qInstallMessageHandler(0);
 	destroyOrphanQObjects();
@@ -627,6 +639,11 @@ void MainWindow::slotSettingsChanged()
 	m_ui.scriptEdit->slotLoadSettings();
 	m_pTemplatesDialog->setPluginsList(vsPluginsList);
 	m_pTemplatesDialog->slotLoadSettings();
+
+	if(m_pSettingsManager->getReloadScriptFromDisk())
+		m_pReloadTextTimer->start(500);
+	else
+		m_pReloadTextTimer->stop();
 }
 
 // END OF void MainWindow::slotSettingsChanged()
@@ -646,6 +663,34 @@ void MainWindow::slotScriptFileDropped(const QString & a_filePath,
 // END OF void MainWindow::slotScriptFileDropped(const QString & a_filePath,
 //		bool * a_pHandled)
 //==============================================================================
+
+void MainWindow::slotReloadTextFromDisk()
+{
+	if(m_ui.scriptEdit->isModified())
+		return;
+
+	if(m_scriptFilePath.isEmpty())
+		return;
+
+	QFile scriptFile(m_scriptFilePath);
+	bool loadSuccess = scriptFile.open(QIODevice::ReadOnly | QIODevice::Text);
+	if(!loadSuccess)
+		return;
+
+	QByteArray utf8Script = scriptFile.readAll();
+	QString scriptText = QString::fromUtf8(utf8Script);
+	if(scriptText.isEmpty()) // To prevent an occasional bug?
+		return;
+	if(scriptText == m_ui.scriptEdit->text())
+		return;
+
+	QPoint pos = m_ui.scriptEdit->cursorPosition();
+	m_ui.scriptEdit->setPlainText(scriptText);
+	m_ui.scriptEdit->setCursorPosition(pos);
+	m_ui.scriptEdit->setModified(false);
+
+	m_pBenchmarkDialog->resetSavedRange();
+}
 
 void MainWindow::slotSaveGeometry()
 {
