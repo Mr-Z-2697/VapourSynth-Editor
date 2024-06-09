@@ -108,11 +108,14 @@
       </item>
       <item>
        <widget class="QLabel" name="frameStatusLabel">
-        <property name="minimumSize">
+        <property name="maximumSize">
          <size>
           <width>16</width>
-          <height>0</height>
+          <height>16</height>
          </size>
+        </property>
+        <property name="scaledContents">
+         <bool>true</bool>
         </property>
         <property name="text">
          <string/>
