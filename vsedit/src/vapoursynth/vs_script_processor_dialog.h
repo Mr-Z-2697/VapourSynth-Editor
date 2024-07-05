@@ -11,6 +11,7 @@
 #include <QString>
 #include <list>
 #include <vector>
+#include <map>
 
 class QCloseEvent;
 class QStatusBar;
@@ -21,8 +22,6 @@ class VapourSynthScriptProcessor;
 struct VSAPI;
 struct VSVideoInfo;
 struct VSFrame;
-
-#define MAX_VS_OUTPUT 20
 
 class VSScriptProcessorDialog : public QDialog
 {
@@ -95,10 +94,10 @@ protected:
 
 	const VSAPI * m_cpVSAPI;
 
-	VSNodeInfo m_nodeInfo[MAX_VS_OUTPUT];
+	std::map<int, VSNodeInfo> m_nodeInfo;
 
-	size_t m_framesInQueue[MAX_VS_OUTPUT];
-	size_t m_framesInProcess[MAX_VS_OUTPUT];
+	std::map<int, size_t> m_framesInQueue;
+	std::map<int, size_t> m_framesInProcess;
 	size_t m_maxThreads;
 	double m_usedCacheRatio;
 
@@ -115,7 +114,7 @@ protected:
 	QPixmap m_busyPixmap;
 	QPixmap m_errorPixmap;
 
-	std::list<Frame> m_framesCache[MAX_VS_OUTPUT];
+	std::map<int, std::list<Frame>> m_framesCache;
 	size_t m_cachedFramesLimit;
 
 	QString m_clipName;

@@ -304,6 +304,7 @@ void PreviewDialog::previewScript(const QString& a_script,
 	m_outputIndices = m_pVapourSynthScriptProcessor->getOutputIndices();
 	if(m_outputIndices.size() > 0)
 	{
+		m_ui.outputIndexComboBox->setSizeAdjustPolicy(QComboBox::AdjustToContents);
 		m_ui.outputIndexComboBox->clear();
 		for(auto i : m_outputIndices)
 			m_ui.outputIndexComboBox->addItem(QString::number(i));
