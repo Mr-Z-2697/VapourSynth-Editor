@@ -205,6 +205,9 @@ protected slots:
 
 #undef SLOT_SWITCH_OUTPUT_INDEX
 
+	void slotSwitchToPreviousOutputIndex();
+	void slotSwitchToNextOutputIndex();
+
 protected:
 
 	friend class FramePropsPanel;
@@ -345,6 +348,8 @@ protected:
 	QAction * m_pActionSwitchToOutputIndex17;
 	QAction * m_pActionSwitchToOutputIndex18;
 	QAction * m_pActionSwitchToOutputIndex19;
+	QAction * m_pActionSwitchToPreviousOutputIndex;
+	QAction * m_pActionSwitchToNextOutputIndex;
 
 	std::map<QString, ZoomMode> m_actionIDToZoomModeMap;
 
