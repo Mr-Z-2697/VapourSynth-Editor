@@ -69,6 +69,12 @@
     <QtMoc>
       <QtMocDir>..\..\vsedit\generated\moc</QtMocDir>
     </QtMoc>
+    <QtRcc>
+      <QtRccDir>..\..\vsedit\generated\rcc</QtRccDir>
+    </QtRcc>
+    <QtUic>
+      <QtUicDir>..\..\vsedit\generated\ui</QtUicDir>
+    </QtUic>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
     <ClCompile>
