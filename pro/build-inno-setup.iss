@@ -2,7 +2,7 @@
 
 #define AppName "VapourSynth Editor"
 #define ExeName "vsedit"
-#define Version "r19-mod-6.7"
+#define Version "r19-mod-6.8"
 
 [Setup]
 AppId={#AppName}
@@ -41,6 +41,7 @@ Source: ..\build\release-64bit-msvc\vsedit.exe; DestDir: {app}; Flags: ignorever
 Source: ..\build\release-64bit-msvc\vsedit-job-server.exe; DestDir: {app}; Flags: ignoreversion uninsrestartdelete restartreplace
 Source: ..\build\release-64bit-msvc\vsedit-job-server-watcher.exe; DestDir: {app}; Flags: ignoreversion uninsrestartdelete restartreplace
 Source: ..\build\release-64bit-msvc\vsedit-previewer.exe; DestDir: {app}; Flags: ignoreversion uninsrestartdelete restartreplace
+Source: ..\build\release-64bit-msvc\vsedit-encode.exe; DestDir: {app}; Flags: ignoreversion uninsrestartdelete restartreplace
 Source: ..\build\release-64bit-msvc\vsedit.ico; DestDir: {app}; Flags: ignoreversion uninsrestartdelete restartreplace
 Source: ..\build\release-64bit-msvc\vsedit.svg; DestDir: {app}; Flags: ignoreversion uninsrestartdelete restartreplace
 Source: ..\build\release-64bit-msvc\README; DestDir: {app}; Flags: ignoreversion uninsrestartdelete restartreplace
