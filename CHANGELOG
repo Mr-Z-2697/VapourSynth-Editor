@@ -1,3 +1,8 @@
+r19-mod-6.8
+-BUGFIX: Switching output index could fail after immediate playback.
+-Add hotkey options for switching to previous or next output index.
+-Add standalone console launcher for encode panel.
+
 r19-mod-6.7
 -BUGFIX: Messages sent by core logging are missing after preview refresh.
 -Add combo box for switching output index (enabled with VS R69 or later).
