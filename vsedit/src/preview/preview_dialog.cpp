@@ -1683,6 +1683,7 @@ void PreviewDialog::slotPlay(bool a_play)
 		m_audioCache.clear();
 #endif
 		m_pVapourSynthScriptProcessor->flushFrameTicketsQueue();
+		m_ui.outputIndexComboBox->setEnabled(true);
 		m_pActionPlay->setIcon(m_iconPlay);
 		setTitle();
 	}
@@ -2298,8 +2299,10 @@ void PreviewDialog::slotSwitchOutputIndex(int a_outputIndex)
 void PreviewDialog::slotEnableSwitchOutputIndex(bool a_idle)
 {
 	if(m_playing)
+	{
 		m_ui.outputIndexComboBox->setEnabled(false);
-	
+		return;
+	}
 	m_ui.outputIndexComboBox->setEnabled(a_idle);
 }
 
