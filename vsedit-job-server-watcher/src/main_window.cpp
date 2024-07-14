@@ -294,7 +294,7 @@ void MainWindow::show()
 		showMaximized();
 	else
 		showNormal();
-	QApplication::setActiveWindow(this);
+	activateWindow();
 }
 
 // END OF MainWindow::show()

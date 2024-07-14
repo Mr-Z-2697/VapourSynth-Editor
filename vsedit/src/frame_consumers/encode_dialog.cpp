@@ -123,7 +123,7 @@ void EncodeDialog::showActive()
 		showNormal();
 	else
 		show();
-	QApplication::setActiveWindow(this);
+	activateWindow();
 }
 
 // END OF void EncodeDialog::showActive()
