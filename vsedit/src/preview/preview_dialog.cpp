@@ -231,6 +231,8 @@ PreviewDialog::PreviewDialog(SettingsManager * a_pSettingsManager,
 		this, SLOT(slotPreviewAreaMouseOverPoint(double, double)));
 	connect(m_pPlayTimer, SIGNAL(timeout()),
 		this, SLOT(slotProcessPlayQueue()));
+	connect(this, SIGNAL(signalProcessorIdle(bool)),
+		this, SLOT(slotEnableSwitchOutputIndex(bool)));
 
 #ifdef Q_OS_WIN // AUDIO
 	qputenv("QT_MEDIA_BACKEND", QString("windows").toLocal8Bit());
@@ -1679,7 +1681,6 @@ void PreviewDialog::slotPlay(bool a_play)
 		m_audioCache.clear();
 #endif
 		m_pVapourSynthScriptProcessor->flushFrameTicketsQueue();
-		m_ui.outputIndexComboBox->setEnabled(true);
 		m_pActionPlay->setIcon(m_iconPlay);
 		setTitle();
 	}
@@ -2292,8 +2293,19 @@ void PreviewDialog::slotSwitchOutputIndex(int a_outputIndex)
 // END OF void PreviewDialog::slotSwitchOutputIndex(int a_outputIndex)
 //==============================================================================
 
+void PreviewDialog::slotEnableSwitchOutputIndex(bool a_idle)
+{
+	if(m_playing)
+		m_ui.outputIndexComboBox->setEnabled(false);
+	
+	m_ui.outputIndexComboBox->setEnabled(a_idle);
+}
+
 void PreviewDialog::setOutputIndex(int a_index)
 {
+	if(!m_ui.outputIndexComboBox->isEnabled())
+		return;
+
 	if(m_playing)
 		return;
 
