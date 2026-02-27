@@ -2,26 +2,6 @@ CONFIG += qt
 
 QT += widgets
 QT += websockets
-QT += core5compat
-
-win32 {
-	equals(QT_MAJOR_VERSION, 5) {
-		equals(QT_MINOR_VERSION, 6):lessThan(QT_PATCH_VERSION, 1)) {
-			message($$QT_VERSION_WARNING)
-		}
-		lessThan(QT_MINOR_VERSION, 6) {
-			message($$QT_VERSION_WARNING)
-		}
-	}
-}
-
-equals(QT_MAJOR_VERSION, 6) {
-	QT += core5compat
-
-	contains(QMAKE_COMPILER, msvc) {
-		QMAKE_LFLAGS += '/entry:mainCRTStartup'
-	}
-}
 
 HOST_64_BIT = contains(QMAKE_HOST.arch, "x86_64")
 TARGET_64_BIT = contains(QMAKE_TARGET.arch, "x86_64")
